@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<style>
+body {background-color:gold;}
+table,th,td {
+  border : 1px solid black;
+  border-collapse: collapse;
+}
+th,td {
+  padding: 5px;
+}
+</style>
+<body>
+
+<h1>Contacts  </h1>
+
+<input type="radio" id="all" name="selectdisplay" value="all">
+<label for="html">Display all</label><br><br>
+
+<input type="radio" id="tel" name="selectdisplay" value="tel">
+<label for="css">Display by telephone number</label>
+<input type="text" name="telnum"><br><br>
+
+
+<input type="radio" id="profe" name="selectdisplay" value="prof">
+<label for="javascript">Display by profession</label>
+<input type="text" name="prof"><br><br>
+
+<button type="button" onclick="loadDoc()">Go</button>
+
+<table id="demo"></table>
+
+<script>
+
+function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      myFunction(this);
+    }
+  };
+  xhttp.open("GET", "contact_directory.xml", true);
+  xhttp.send();
+}
+
+function myFunction(xml) {
+  var i;
+  var xmlDoc = xml.responseXML;
+  var table="<tr><th>Name</th></th><th>Profession</th></th><th>Tel</th></th><th>Mobile</th></tr>";
+  var x = xmlDoc.getElementsByTagName("CONTACT");
+  var found = false;
+ 
+    if(document.getElementById("all").checked){
+      for (i = 0; i <x.length; i++) { 
+    table += "<tr><td>" +
+      x[i].getElementsByTagName("NAME")[0].childNodes[0].nodeValue +
+      "</td><td>" +
+      x[i].getElementsByTagName("PROFESSION")[0].childNodes[0].nodeValue +
+      "</td><td>" +
+      x[i].getElementsByTagName("TELEPHONE")[0].childNodes[0].nodeValue +
+      "</td><td>" +
+      x[i].getElementsByTagName("MOBILE")[0].childNodes[0].nodeValue +
+      "</td></tr>" ;
+    }
+  }
+    else if(document.getElementById("tel").checked){
+      for (i = 0; i <x.length; i++) { 
+        if(document.getElementsByName("telnum")[0].value == x[i].getElementsByTagName("TELEPHONE")[0].childNodes[0].nodeValue){
+          found=true;
+      table += "<tr><td>" +
+      x[i].getElementsByTagName("NAME")[0].childNodes[0].nodeValue +
+      "</td><td>" +
+      x[i].getElementsByTagName("PROFESSION")[0].childNodes[0].nodeValue +
+      "</td><td>" +
+      x[i].getElementsByTagName("TELEPHONE")[0].childNodes[0].nodeValue +
+      "</td><td>" +
+      x[i].getElementsByTagName("MOBILE")[0].childNodes[0].nodeValue +
+      "</td></tr>" ;
+      }
+    }
+    if(found==false){
+      alert("Not found");
+    }
+  }
+
+    else if(document.getElementById("profe").checked){
+      for (i = 0; i <x.length; i++) { 
+        if(document.getElementsByName("prof")[0].value == x[i].getElementsByTagName("PROFESSION")[0].childNodes[0].nodeValue){
+          found=true;
+          table += "<tr><td>" +
+          x[i].getElementsByTagName("NAME")[0].childNodes[0].nodeValue +
+          "</td><td>" +
+           x[i].getElementsByTagName("PROFESSION")[0].childNodes[0].nodeValue +
+          "</td><td>" +
+          x[i].getElementsByTagName("TELEPHONE")[0].childNodes[0].nodeValue +
+          "</td><td>" +
+          x[i].getElementsByTagName("MOBILE")[0].childNodes[0].nodeValue +
+          "</td></tr>" ;
+      }
+      
+    }
+    if(found==false){
+      alert("Not found");
+    }
+  }
+  document.getElementById("demo").innerHTML = table;
+}
+</script> 
+</body>
+</html>
+
+
